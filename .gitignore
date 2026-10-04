@@ -18,3 +18,7 @@ env/
 # OS
 .DS_Store
 Thumbs.db
+
+# Per-model artifacts (regenerate with: python -m src.train)
+models/drop_outcome/
+models/threshold_outcome/
