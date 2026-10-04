@@ -1,0 +1,57 @@
+column,group,type,description,percent_missing,role
+patient_id,Demographics,categorical,Unique synthetic patient record identifier,0.0,identifier
+age,Demographics,integer,Patient age in years at baseline,0.0,feature
+sex,Demographics,categorical,"Biological sex of the patient (Female, Male)",0.0,feature
+race,Demographics,categorical,Reported racial or ethnic background,0.0,feature
+insurance,Demographics,categorical,Primary health insurance coverage type,0.0,feature
+marital_status,Demographics,categorical,Marital status of the patient,0.0,feature
+bmi,Demographics,float,Body mass index in kg/m^2,0.0,feature
+smoking_status,Demographics,categorical,"Tobacco smoking history (Never, Former, Current)",0.0,feature
+cancer_type,Cancer/treatment,categorical,Primary cancer diagnosis anatomical site,0.0,feature
+stage,Cancer/treatment,integer,Clinical cancer stage (1 to 4),0.0,feature
+chemo_regimen,Cancer/treatment,categorical,Type of chemotherapy protocol administered,0.0,feature
+treatment_intent,Cancer/treatment,categorical,Clinical intent of treatment (Curative vs Palliative),0.0,feature
+ecog_status,Cancer/treatment,integer,Eastern Cooperative Oncology Group performance status (0 to 3),0.0,feature
+prior_surgery,Cancer/treatment,binary,"History of cancer surgery prior to chemo (1=Yes, 0=No)",0.0,feature
+prior_radiation,Cancer/treatment,binary,"History of radiation therapy prior to chemo (1=Yes, 0=No)",0.0,feature
+months_since_diagnosis,Cancer/treatment,float,Time elapsed since initial cancer diagnosis in months,0.0,feature
+num_comorbidities,History/meds/utilization,integer,Total count of chronic comorbid medical conditions,0.0,feature
+diabetes,History/meds/utilization,binary,"Diagnosis of diabetes mellitus (1=Yes, 0=No)",0.0,feature
+hypertension,History/meds/utilization,binary,"Diagnosis of hypertension (1=Yes, 0=No)",0.0,feature
+copd,History/meds/utilization,binary,"Diagnosis of chronic obstructive pulmonary disease (1=Yes, 0=No)",0.0,feature
+heart_disease,History/meds/utilization,binary,"History of cardiovascular disease (1=Yes, 0=No)",0.0,feature
+depression_history,History/meds/utilization,binary,"Clinical diagnosis or history of depression (1=Yes, 0=No)",0.0,feature
+med_analgesic,History/meds/utilization,binary,"Active prescription for non-opioid pain medication (1=Yes, 0=No)",0.0,feature
+med_opioid,History/meds/utilization,binary,"Active prescription for opioid analgesic (1=Yes, 0=No)",0.0,feature
+med_antidepressant,History/meds/utilization,binary,"Active prescription for antidepressant (1=Yes, 0=No)",0.0,feature
+med_antiemetic,History/meds/utilization,binary,"Active prescription for anti-nausea medication (1=Yes, 0=No)",0.0,feature
+med_steroid,History/meds/utilization,binary,"Active prescription for corticosteroid (1=Yes, 0=No)",0.0,feature
+num_med_classes,History/meds/utilization,integer,Total number of concurrent active prescription drug classes,0.0,feature
+ed_visits_6m,History/meds/utilization,integer,Emergency department visits in the past 6 months,0.0,feature
+hospitalizations_6m,History/meds/utilization,integer,Inpatient hospital admissions in the past 6 months,0.0,feature
+psychiatry_visits_6m,History/meds/utilization,integer,Outpatient psychiatry appointments in the past 6 months,0.0,feature
+heart_rate,Vitals,integer,Resting heart rate in beats per minute,0.0,feature
+systolic_bp,Vitals,integer,Systolic blood pressure in mmHg,0.0,feature
+diastolic_bp,Vitals,integer,Diastolic blood pressure in mmHg,0.0,feature
+temperature_c,Vitals,float,Body temperature in degrees Celsius,0.0,feature
+resp_rate,Vitals,integer,Respiratory rate in breaths per minute,0.0,feature
+spo2,Vitals,integer,Blood oxygen saturation percentage,0.0,feature
+weight_loss_pct_6m,Vitals,float,Percentage of body weight lost over the past 6 months,0.0,feature
+hemoglobin_g_dl,Labs,float,Hemoglobin concentration in g/dL,20.44,feature
+wbc_k_ul,Labs,float,White blood cell count in 10^3/uL,20.39,feature
+platelets_k_ul,Labs,float,Platelet count in 10^3/uL,22.94,feature
+albumin_g_dl,Labs,float,Serum albumin level in g/dL,23.67,feature
+creatinine_mg_dl,Labs,float,Serum creatinine concentration in mg/dL,21.61,feature
+alt_u_l,Labs,float,Alanine aminotransferase liver enzyme in U/L,30.39,feature
+bilirubin_mg_dl,Labs,float,Total bilirubin level in mg/dL,32.33,feature
+sodium_mmol_l,Labs,float,Serum sodium electrolyte in mmol/L,22.67,feature
+potassium_mmol_l,Labs,float,Serum potassium electrolyte in mmol/L,24.11,feature
+glucose_mg_dl,Labs,float,Blood glucose level in mg/dL,28.22,feature
+crp_mg_l,Labs,float,C-reactive protein inflammatory marker in mg/L,54.39,feature
+ldh_u_l,Labs,float,Lactate dehydrogenase tissue injury marker in U/L,45.72,feature
+psa_ng_ml,Labs,float,Prostate-specific antigen tumor marker in ng/mL,84.83,feature
+baseline_gph,Baseline PRO scores,float,PROMIS Global Physical Health standardized T-score before chemo,0.0,feature
+baseline_gmh,Baseline PRO scores,float,PROMIS Global Mental Health standardized T-score before chemo,0.0,feature
+on_chemo_gph,Outcome,float,PROMIS Global Physical Health T-score during chemo (label leakage),0.0,leakage
+drop_outcome,Outcome,binary,"Primary target: 1 if GPH dropped by 10+ points during chemo, 0 otherwise",0.0,label
+threshold_outcome,Outcome,binary,"Secondary outcome: 1 if on-chemo GPH is 40 or below, 0 otherwise",0.0,label
