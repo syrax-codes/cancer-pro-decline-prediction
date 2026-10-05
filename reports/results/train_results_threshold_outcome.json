@@ -1,0 +1,64 @@
+{
+  "target": "threshold_outcome",
+  "final_model": "Logistic Regression",
+  "models": {
+    "Logistic Regression": {
+      "cv_auroc": 0.9121046146997699,
+      "cv_auroc_std": 0.01735020878640903,
+      "best_params": {
+        "C": 0.1,
+        "l1_ratio": 1.0
+      },
+      "threshold": 0.32
+    },
+    "KNN": {
+      "cv_auroc": 0.8844207103215,
+      "cv_auroc_std": 0.019752712098547516,
+      "best_params": {
+        "n_neighbors": 201,
+        "weights": "distance"
+      },
+      "threshold": 0.42
+    },
+    "SVM": {
+      "cv_auroc": 0.9023523435787668,
+      "cv_auroc_std": 0.01902887095033974,
+      "best_params": {
+        "C": 0.01,
+        "kernel": "linear"
+      },
+      "threshold": 0.31
+    },
+    "Random Forest": {
+      "cv_auroc": 0.90252155902272,
+      "cv_auroc_std": 0.010985153751603664,
+      "best_params": {
+        "max_features": "sqrt",
+        "min_samples_leaf": 1
+      },
+      "threshold": 0.44
+    },
+    "Gradient Boosting": {
+      "cv_auroc": 0.9045422689906314,
+      "cv_auroc_std": 0.014643697938728216,
+      "best_params": {
+        "learning_rate": 0.03,
+        "max_depth": 2,
+        "n_estimators": 300
+      },
+      "threshold": 0.41
+    },
+    "Voting Ensemble": {
+      "cv_auroc": 0.9104359915866367,
+      "cv_auroc_std": 0.014931148517546889,
+      "best_params": {
+        "members": [
+          "Logistic Regression",
+          "Gradient Boosting",
+          "Random Forest"
+        ]
+      },
+      "threshold": 0.38
+    }
+  }
+}

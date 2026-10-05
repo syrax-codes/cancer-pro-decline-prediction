@@ -1,0 +1,20 @@
+{
+  "target": "threshold_outcome",
+  "final_model": "Logistic Regression",
+  "threshold": 0.32,
+  "test_auroc": 0.9128929553955056,
+  "test_auroc_ci": [
+    0.8832944279294245,
+    0.939232298403792
+  ],
+  "metrics": {
+    "CV AUROC (train)": 0.9121046146997699,
+    "Test AUROC": 0.9128929553955056,
+    "PR-AUC": 0.9208428689686537,
+    "Accuracy": 0.825,
+    "Precision": 0.7767857142857143,
+    "Recall": 0.93048128342246,
+    "F1": 0.8467153284671532,
+    "Threshold": 0.32
+  }
+}
