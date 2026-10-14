@@ -33,7 +33,8 @@ An applied Machine Learning project predicting clinically meaningful decline in 
 │   └── evaluate.py              # Test metrics, figures, feature importance, ablation
 ├── models/
 │   ├── preprocessor.joblib      # Fitted ColumnTransformer from preprocessing (scikit-learn 1.7)
-│   └── final_model.joblib       # Final model: full pipeline (preprocessing + classifier) + threshold
+│   ├── final_model.joblib       # Final model: full pipeline (preprocessing + classifier) + threshold
+│   └── final_model_threshold_outcome.joblib # Final model for secondary target (threshold_outcome)
 ├── reports/
 │   ├── figures/                 # EDA figures (01-10) and model figures (11-14)
 │   ├── results/                 # Model comparison tables, ablation, feature importance
@@ -43,6 +44,7 @@ An applied Machine Learning project predicting clinically meaningful decline in 
 │   ├── app.py                   # Streamlit demo with What-If Risk Simulator
 │   ├── utils.py                 # Model loading, input row building, risk sweeps
 │   └── app_inputs.json          # Demo configuration (12 key inputs, schema, example patients)
+├── Ostberg_Peterson.pdf         # Reference Stanford CS229 research paper
 ├── requirements.txt
 └── README.md
 ```
@@ -83,7 +85,9 @@ An applied Machine Learning project predicting clinically meaningful decline in 
 - **Final model choice:** highest cross-validated AUROC; the test set is used only once, for the final report.
 - **Class imbalance (20% positive):** probabilities are left unweighted (so they read as real risks) and the decision threshold is the one that maximises F1 on out-of-fold training predictions.
 
-## Results (test set, 360 patients, `drop_outcome`)
+## Results
+
+### Primary Target: `drop_outcome` (10-point drop in GPH, n=360 test, 20.3% positives)
 
 | Model | CV AUROC | Test AUROC | PR-AUC | Accuracy | Precision | Recall | F1 |
 |---|---|---|---|---|---|---|---|
@@ -94,7 +98,20 @@ An applied Machine Learning project predicting clinically meaningful decline in 
 | Gradient Boosting | 0.738 | 0.739 | 0.438 | 0.622 | 0.309 | 0.699 | 0.429 |
 | Voting Ensemble | 0.752 | 0.761 | 0.485 | 0.683 | 0.361 | 0.726 | 0.482 |
 
-Final model test AUROC 0.764 (bootstrap 95% CI 0.695-0.823), close to the paper's best of 0.771 on real Stanford data. The LASSO keeps 35 of 89 features; the strongest are cancer stage, hemoglobin, albumin, baseline GMH/GPH and ECOG status. Second outcome (`threshold_outcome`): Logistic Regression test AUROC 0.913.
+Final model test AUROC **0.764** (bootstrap 95% CI 0.695–0.823), closely matching the paper's best of **0.771** on real Stanford data. The LASSO keeps 35 of 89 features; the strongest are cancer stage, hemoglobin, albumin, baseline GMH/GPH, and ECOG status.
+
+### Secondary Target: `threshold_outcome` (On-chemo GPH score $\le 40$, n=360 test, 51.9% positives)
+
+| Model | CV AUROC | Test AUROC | PR-AUC | Accuracy | Precision | Recall | F1 |
+|---|---|---|---|---|---|---|---|
+| **Logistic Regression (final)** | **0.912** | **0.913** | **0.921** | 0.825 | 0.777 | 0.930 | **0.847** |
+| KNN | 0.884 | 0.886 | 0.889 | 0.797 | 0.803 | 0.807 | 0.805 |
+| SVM | 0.902 | 0.906 | 0.913 | 0.808 | 0.763 | 0.914 | 0.832 |
+| Random Forest | 0.903 | 0.911 | 0.913 | 0.825 | 0.795 | 0.893 | 0.841 |
+| Gradient Boosting | 0.905 | 0.910 | 0.914 | 0.822 | 0.797 | 0.882 | 0.838 |
+| Voting Ensemble | 0.910 | 0.914 | 0.920 | 0.825 | 0.790 | 0.904 | 0.843 |
+
+---
 
 ## Demo: What-If Risk Simulator
 
@@ -102,11 +119,13 @@ The Streamlit app takes the 12 key pre-treatment inputs (the other 40 stay at a 
 
 ---
 
-## Handover to Modeling
+## Data Pipeline & Preprocessing Specifications
 
-The preprocessing phase is complete. The modeling workflow (`03_model_training.ipynb`) should directly ingest the prepared artifacts:
+The data preprocessing pipeline produces fully prepared, leakage-free datasets:
 
-- **Target Variable:** `drop_outcome` (Class 0: 79.58% no drop, Class 1: 20.42% clinically meaningful decline).
+- **Target Variables:**
+  - `drop_outcome`: Primary endpoint ($\ge 10$-point decline in GPH during chemo; ~20.4% prevalence).
+  - `threshold_outcome`: Secondary endpoint (on-chemo GPH $\le 40$; ~51.9% prevalence).
 - **Data Location:**
   - `data/processed/X_train.csv` (1,440 rows $\times$ 89 features)
   - `data/processed/X_test.csv` (360 rows $\times$ 89 features)
@@ -118,6 +137,5 @@ The preprocessing phase is complete. The modeling workflow (`03_model_training.i
   - 13 binary missingness indicator features (`num__missingindicator_*`) are included to preserve clinical ordering signals.
   - Categorical variables are one-hot encoded (`cat__*`).
   - No missing values (`NaN`) exist in train or test matrices.
-- **Fitted Pipeline:** Saved at `models/preprocessor.joblib` for transforming new raw patient data in production or the demo app.
-- **Global Reproducibility Seed:** `random_state=42`.
-- **Recommended Evaluation Metrics:** Given the ~20.4% class prevalence, prioritize **AUROC**, **Precision-Recall AUC (PR-AUC)**, and **Recall / F1-score** over raw accuracy.
+  - Complete leakage avoidance: All transformations are fit strictly within training folds.
+- **Reproducibility:** Global seed fixed at `random_state=42`.
